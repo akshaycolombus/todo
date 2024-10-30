@@ -6,7 +6,7 @@ def connect():
     try:
         params =config()
         conn = psycopg2.connect(**params)
-        print("Connected to the Database Succesfully")
+        # print("Connected to the Database Succesfully")
         return conn
     
     except (Exception, psycopg2.DatabaseError) as error:
