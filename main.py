@@ -18,12 +18,17 @@ def save_tasks(tasks):
 
 def add_task():
     task = input("Enter a new task: ")
-    tasks = load_tasks()
-    tasks.append(task)
-    print("Task added!")
-    save_tasks(tasks)
-    print("Task saved to file")
-    
+    conn = connect()
+    try:
+        with conn.cursor() as cur:
+            cur.execute("INSERT INTO tasks (task_desc) VALUES (%s)", (task,))
+            conn.commit()
+            print("Task added!")
+        
+    except (Exception, psycopg2.DatabaseError) as error:
+        print("Error adding task: " , error)
+    finally:
+        conn.close()
 
 
 def view_task():
@@ -35,10 +40,9 @@ def view_task():
             tasks = cur.fetchall()
             if tasks:
                 print("Your Tasks: ")
-                for task in task:
-                    print(task)
-                    # status = "✔" if task[2] else "✘"
+                for task in tasks:
                     print(f"{task[0]}. {task[1]}")
+                    # status = "✔" if task[2] else "✘"    
                     # print(f"{task[0]}. {task[1]} [{status}]")
             
             else:
@@ -48,12 +52,6 @@ def view_task():
     finally:
         conn.close()
     
-    # if not tasks:
-    #     print("No tasks found.")
-    # else:
-    #     print("Your tasks: ")
-    #     for idx, task in enumerate(tasks, 1):
-    #         print(f"{idx}. {task}")
 
 
 def remove_task():
