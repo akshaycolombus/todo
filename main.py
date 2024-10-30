@@ -14,4 +14,20 @@ def save_tasks(tasks):
 
 
 
+def add_task():
+    task = input("Enter a new task: ")
+    tasks = load_tasks()
+    tasks.append(task)
+    save_tasks(tasks)
+    print("Task added!")
+
+
+def view_task():
+    tasks = load_tasks
+    if not tasks:
+        print("No tasks found.")
+    else:
+        print("Your tasks: ")
+        for idx, task in enumerate(tasks, 1):
+            print(f"{idx}. {task}")
 
