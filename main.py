@@ -31,3 +31,17 @@ def view_task():
         for idx, task in enumerate(tasks, 1):
             print(f"{idx}. {task}")
 
+
+def remove_task():
+    tasks = load_tasks()
+    view_task()
+    try: 
+        task_num = int(input("Enter the task number to remove")) - 1
+        if 0 <=  task_num <= len(tasks)
+            removed_task = tasks.pop(task_num)
+            save_tasks()
+            print(f"Removed task: {removed_task}")
+        else: 
+            print("Invalid task number.")
+    except ValueError:
+        print("Please enter a valid number.")
