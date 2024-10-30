@@ -1,5 +1,7 @@
 import json
 import os
+from db import connect
+import psycopg2
 
 def load_tasks():
     if os.path.exists("tasks.json"):
@@ -25,13 +27,33 @@ def add_task():
 
 
 def view_task():
+    conn = connect()
     tasks = load_tasks()
-    if not tasks:
-        print("No tasks found.")
-    else:
-        print("Your tasks: ")
-        for idx, task in enumerate(tasks, 1):
-            print(f"{idx}. {task}")
+    try:
+        with conn.cursor() as cur:
+            cur.execute("select tsk.id, tsk.task_desc from tasks tsk ORDER BY tsk.id asc")
+            tasks = cur.fetchall()
+            if tasks:
+                print("Your Tasks: ")
+                for task in task:
+                    print(task)
+                    # status = "✔" if task[2] else "✘"
+                    print(f"{task[0]}. {task[1]}")
+                    # print(f"{task[0]}. {task[1]} [{status}]")
+            
+            else:
+                print("No tasks found.")
+    except (Exception, psycopg2.DatabaseError) as error:
+        print(f"Error retrieving tasks: {error}")   
+    finally:
+        conn.close()
+    
+    # if not tasks:
+    #     print("No tasks found.")
+    # else:
+    #     print("Your tasks: ")
+    #     for idx, task in enumerate(tasks, 1):
+    #         print(f"{idx}. {task}")
 
 
 def remove_task():
