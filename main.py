@@ -38,7 +38,7 @@ def remove_task():
     tasks = load_tasks()
     view_task()
     try: 
-        task_num = int(input("Enter the task number to remove")) - 1
+        task_num = int(input("Enter the task number to remove: ")) - 1
         if 0 <=  task_num <= len(tasks):
             removed_task = tasks.pop(task_num)
             save_tasks(tasks)
@@ -52,14 +52,19 @@ def update_task():
     tasks = load_tasks()
     view_task()
 
-    task_num = int(input("Which task would you like to update: "))
-    if 0 <= task_num - 1 <= len(tasks):
-        new_task = input("Enter new Task: ")
-        tasks[task_num - 1] = new_task
-        print(f"Task {task_num} is updated to {new_task}")
-        save_tasks(tasks)
 
+    try:
+        task_num = int(input("Which task would you like to update: "))
+        if 0 <= task_num - 1 <= len(tasks):
+            new_task = input("Enter new Task: ")
+            tasks[task_num - 1] = new_task
+            print(f'Task {task_num} is updated to "{new_task}" ')
+            save_tasks(tasks)
+        else:
+            print("Invalid task number")
 
+    except ValueError:
+        print("Please enter a valid number.")
 
 def main():
     while True:
